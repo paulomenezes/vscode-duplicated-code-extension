@@ -1,0 +1,84 @@
+{
+  "name": "duplicated-code",
+  "displayName": "Duplicated code",
+  "description": "Find duplicated lines in your code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.48.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:duplicatedCode"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "package-explorer",
+          "title": "Package Explorer",
+          "icon": "resources/diff.svg"
+        }
+      ]
+    },
+    "views": {
+      "package-explorer": [
+        {
+          "id": "duplicatedCode",
+          "name": "Duplicated code",
+          "icon": "resources/diff.svg",
+          "contextualTitle": "Package Explorer"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "duplicatedCode.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/refresh.svg",
+          "dark": "resources/refresh.svg"
+        }
+      },
+      {
+        "command": "duplicatedCode.openFile",
+        "title": "Open"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "duplicatedCode.refreshEntry",
+          "when": "view == duplicatedCode",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile && yarn run lint",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^14.0.27",
+    "@types/vscode": "^1.49.0",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "eslint": "^7.6.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.1.3",
+    "typescript": "^4.0.2",
+    "vscode-test": "^1.4.0"
+  },
+  "dependencies": {
+    "jscpd": "^3.3.19"
+  }
+}
