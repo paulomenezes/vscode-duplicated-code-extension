@@ -4,6 +4,9 @@
   "description": "Find duplicated lines in your code",
   "version": "0.0.1",
   "publisher": "paulomenezes",
+  "repository": {
+    "url": "https://github.com/paulomenezes/vscode-duplicated-code-extension"
+  },
   "engines": {
     "vscode": "^1.48.0"
   },
