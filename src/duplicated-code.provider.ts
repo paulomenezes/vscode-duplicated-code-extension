@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-import { IClone } from '@jscpd/core';
-import { detectClones } from 'jscpd';
+import { IClone, JSCPD, getStoreManager } from 'jscpd';
 
 import { DuplicatedCode } from './duplicated-code';
 import { DuplicatedCodeType } from './duplicated-code-type.enum';
@@ -35,17 +34,43 @@ export class DuplicatedCodeProvider implements vscode.TreeDataProvider<Duplicate
           )
       );
     } else if (element.type === DuplicatedCodeType.workspace) {
-      return detectClones({
+      const path = `${element.workspaceFolder?.uri.path!}/`;
+
+      const cpd = new JSCPD({
         noSymlinks: true,
-        reporters: [],
-        path: [element.workspaceFolder?.uri.path!],
+        storeOptions: {
+          '*': {
+            type: 'memory',
+            options: {
+              name: 'memory',
+              persist: false,
+            },
+          },
+        },
+        absolute: false,
+        path: [path],
         ignore: ['**/node_modules/**', '**/coverage/**', '**/dist/**', '**/build/**', '**/*.js'],
-      }).then((clones: IClone[]) => {
-        this.clones = clones;
-        return clones.map(
-          (clone, index) => new DuplicatedCode(index, clone, DuplicatedCodeType.line, undefined, vscode.TreeItemCollapsibleState.Collapsed)
-        );
+        gitignore: true,
+        silent: true,
+        debug: false,
+        output: undefined,
       });
+
+      return cpd
+        .detectInFiles([path])
+        .then((clones: IClone[]) => {
+          this.clones = clones;
+
+          getStoreManager().close();
+
+          return clones.map(
+            (clone, index) => new DuplicatedCode(index, clone, DuplicatedCodeType.line, undefined, vscode.TreeItemCollapsibleState.Collapsed)
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+          return [];
+        });
     } else {
       return [new DuplicatedCode(-1, this.clones[element.index], DuplicatedCodeType.detail, undefined, vscode.TreeItemCollapsibleState.None)];
     }

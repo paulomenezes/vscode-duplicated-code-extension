@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { IClone } from '@jscpd/core';
+import { IClone } from 'jscpd';
 import { DuplicatedCodeType } from './duplicated-code-type.enum';
 
 export class DuplicatedCode extends vscode.TreeItem {
