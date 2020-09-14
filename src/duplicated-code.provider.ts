@@ -22,6 +22,12 @@ export class DuplicatedCodeProvider implements vscode.TreeDataProvider<Duplicate
       return Promise.resolve([]);
     }
 
+    let exclude: string[] | undefined = vscode.workspace.getConfiguration('duplicated-code').get('exclude');
+
+    if (!exclude) {
+      exclude = ['**/node_modules/**', '**/coverage/**', '**/dist/**', '**/build/**'];
+    }
+
     if (!element) {
       return this.workspaceFolders.map(
         (workspace) =>
@@ -49,7 +55,7 @@ export class DuplicatedCodeProvider implements vscode.TreeDataProvider<Duplicate
         },
         absolute: false,
         path: [path],
-        ignore: ['**/node_modules/**', '**/coverage/**', '**/dist/**', '**/build/**', '**/*.js'],
+        ignore: exclude,
         gitignore: true,
         silent: true,
         debug: false,

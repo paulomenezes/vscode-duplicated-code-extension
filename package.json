@@ -59,6 +59,22 @@
           "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Duplicated code configuration",
+      "properties": {
+        "duplicated-code.exclude": {
+          "type": "array",
+          "default": [
+            "**/node_modules/**",
+            "**/coverage/**",
+            "**/dist/**",
+            "**/build/**"
+          ],
+          "description": "Files to ignore"
+        }
+      }
     }
   },
   "scripts": {
